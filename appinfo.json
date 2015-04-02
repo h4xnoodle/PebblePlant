@@ -9,13 +9,13 @@
     "resources": {
         "media": [
             {
-                "file": "images/20_48x48.png",
-                "name": "IMAGE_CAKE",
+                "file": "images/19_48x48.png",
+                "name": "IMAGE_YUM",
                 "type": "png"
             },
             {
-                "file": "images/Coda.png",
-                "name": "IMAGE_LEAF",
+                "file": "images/20_48x48.png",
+                "name": "IMAGE_CAKE",
                 "type": "png"
             }
         ]

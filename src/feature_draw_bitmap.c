@@ -31,19 +31,12 @@ uint32_t time_limit_for_state(PlantState_t state);
 static void change_image(uint32_t image);
 static uint32_t image_for_state(PlantState_t state);
 static void change_state();
+static void schedule_wake();
 
-static void layer_update_callback(Layer *layer, GContext* ctx) {
-  // We make sure the dimensions of the GRect to draw into
-  // are equal to the size of the bitmap--otherwise the image
-  // will automatically tile. Which might be what *you* want.
-  
+static void layer_update_callback(Layer *layer, GContext* ctx) { 
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Layer update callback");
 
-#ifdef PBL_PLATFORM_BASALT
   GSize image_size = gbitmap_get_bounds(s_image).size;
-#else 
-  GSize image_size = s_image->bounds.size;
-#endif
 
   GRect frame = layer_get_frame(s_image_layer);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Size of image: %d %d", image_size.w, image_size.h);
@@ -75,7 +68,11 @@ static void change_image(uint32_t new_image) {
 static void wakeup_handler(WakeupId id, int32_t reasonCode) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Wakeup happened");
   change_state();
-  change_image(image_for_state(current_state));
+  uint32_t image = image_for_state(current_state);
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "Image: %u", (unsigned int)image);
+  change_image(image);
+  
+  schedule_wake();
 }
 
 static void init() {
@@ -86,8 +83,13 @@ static void init() {
   });
   window_stack_push(s_main_window, true);
   
-  wakeup_service_subscribe(wakeup_handler);
+//   current_state = persist_read_int(KEY_PLANT_STATE);
   
+  wakeup_service_subscribe(wakeup_handler);
+  schedule_wake();
+}
+
+static void schedule_wake() {
   time_t future = time(NULL) + time_limit_for_state(current_state);
   wakeup_id = wakeup_schedule(future, WAKEUP_ID, true);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "Wake up scheduled");
@@ -120,7 +122,7 @@ static uint32_t image_for_state(PlantState_t state) {
     case ALIVE:
     case THIRSTY:
     case PARCHED:
-      return RESOURCE_ID_IMAGE_LEAF;
+      return RESOURCE_ID_IMAGE_YUM;
     case DYING:
     case DEAD:
     default:
