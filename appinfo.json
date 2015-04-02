@@ -1,0 +1,34 @@
+{
+    "appKeys": {},
+    "capabilities": [
+        ""
+    ],
+    "companyName": "h4xnoodle@gmail.com",
+    "longName": "plant",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/20_48x48.png",
+                "name": "IMAGE_CAKE",
+                "type": "png"
+            },
+            {
+                "file": "images/Coda.png",
+                "name": "IMAGE_LEAF",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "plant",
+    "targetPlatforms": [
+        "basalt"
+    ],
+    "uuid": "148b7a06-348b-4f57-a541-cc26d6a1d77d",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
